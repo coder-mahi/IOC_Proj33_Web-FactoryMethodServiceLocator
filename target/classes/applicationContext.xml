@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/context
+                           http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!-- Enable component scanning if using annotations -->
+    <context:component-scan base-package="com"/>
+    
+    <!-- Service Locator Pattern Implementation -->
+    <bean id="serviceLocator" class="com.serviceLocator.ScoreCompServiceLocator"/>
+    
+    <!-- External Service obtained via Service Locator -->
+    <bean id="externalService" 
+          factory-bean="serviceLocator" 
+          factory-method="getService"
+          scope="singleton"/>  <!-- Explicit scope declaration -->
+    
+    <!-- Score Service Implementation -->
+    <bean id="scoreService" class="com.service.FindScoreServiceImpl">
+        <property name="externalComp" ref="externalService"/>
+        <!-- Consider adding other dependencies here if needed -->
+    </bean>
+    
+    <!-- Additional configuration can go here -->
+</beans>
